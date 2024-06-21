@@ -9,6 +9,7 @@ if (file_exists($maintenance = __DIR__.'/../storage/framework/maintenance.php'))
     require $maintenance;
 }
 //newly joined Prabhat Sharma because of his karma.
+//The joining has been accepted by project manager.
 // Register the Composer autoloader...
 require __DIR__.'/../vendor/autoload.php';
 
