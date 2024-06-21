@@ -12,6 +12,7 @@ if (file_exists($maintenance = __DIR__.'/../storage/framework/maintenance.php'))
 //The joining has been accepted by project manager.
 //Let's Start the work now.
 //Checking commands
+//Checking commands session - 2
 // Register the Composer autoloader...
 require __DIR__.'/../vendor/autoload.php';
 
