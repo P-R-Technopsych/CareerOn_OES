@@ -3,7 +3,7 @@
 
 @section('space-work')
 
-<h1>Login</h1>
+<h1>Forget Password</h1>
 
 @if($errors->any())
     @foreach($errors->all() as $error)
@@ -15,15 +15,17 @@
 <p style="color:red;">{{ Session::get('error') }}</p>
 @endif
 
-<form action="{{ route('userLogin') }}" method="POST">
+@if(Session::has('success'))
+<p style="color:green;">{{ Session::get('success') }}</p>
+@endif
+
+<form action="{{ route('forgetPassword') }}" method="POST">
     @csrf
     <input type="email" name="email" placeholder="Enter email">
     <br><br>
-    <input type="password" name="password" placeholder="Enter password">
-    <br><br>
-    <input type="submit" value="Login">
+    <input type="submit" value="Forget Password">
 </form>
 
-<a href="/forget-password">Forget password</a>
+<a href="/login">Login</a>
 
 @endsection
