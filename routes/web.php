@@ -5,9 +5,12 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\StudentMiddleware;
+use App\Mail\HelloMail;
+use Illuminate\Support\Facades\Mail;
 
 Route::get('/',function(){
     return redirect('/register');
+    //Mail::to('rahulpaseofficial@gmail.com')->send(new HelloMail());
 });
 
 Route::get('/register',[AuthController::class, 'loadRegister']);
