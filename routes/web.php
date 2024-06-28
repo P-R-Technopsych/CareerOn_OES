@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Mail;
 
 Route::get('/',function(){
     return redirect('/register');
-    //Mail::to('rahulpaseofficial@gmail.com')->send(new HelloMail());
+    //Mail::to('example@email.com')->send(new TestMail());
 });
 
 Route::get('/register',[AuthController::class, 'loadRegister']);
@@ -20,6 +20,12 @@ Route::get('/login',[AuthController::class, 'loadLogin']);
 Route::post('/login',[AuthController::class,'userLogin'])->name('userLogin');
 
 Route::get('/logout',[AuthController::class, 'logout']);
+
+Route::get('/forget-password',[AuthController::class, 'forgetPasswordLoad']);
+Route::post('/forget-password',[AuthController::class, 'forgetPassword'])->name('forgetPassword');
+
+Route::get('/reset-password',[AuthController::class, 'resetPasswordLoad']);
+Route::post('/reset-password',[AuthController::class, 'resetPassword'])->name('resetPassword');
 
 Route::get('/dashboard',[AuthController::class, 'loadDashboard'])->middleware(StudentMiddleware::class);
 
