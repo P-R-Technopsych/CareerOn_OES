@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
 use App\Models\PasswordReset;
-use Mail;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Carbon;
@@ -110,7 +110,7 @@ class AuthController extends Controller
 
                 $data['url'] = $url;
                 $data['email'] = $request->email;
-                $data['title'] = 'Password Reset';
+                $data['title'] = 'Password Reset Request | Action Required';
                 $data['body'] = 'Please click on below link to reset your password.';
                 $data['ignore'] = 'Ignore if it is not you';
 
