@@ -141,12 +141,14 @@ class AuthController extends Controller
         }
     }
 
+
     public function resetPasswordLoad(Request $request){
-        $resetData = PasswordReset::where('token',$request->token)->get();
+        $passwordResetData = PasswordReset::where('token',$request->token)->first();
 
-        if( isset($request->token) && count($resetData) > 0 ){
+        if( isset($request->token) && !empty($passwordResetData) ){
 
-            $user = User::where('email' , $resetData[0]['email'])->get();
+            $userData = User::where('email' , $passwordResetData['email'])->first();
+            $user = $userData['id'];
 
             return view('resetPassword', compact('user'));
         }
@@ -162,9 +164,11 @@ class AuthController extends Controller
         ]);
 
         $user = User::find($request->id);
+
+        echo "$user";
+
         $user->password = Hash::make($request->password);
         $user->save();
-
         PasswordReset::where('email',$user->email)->delete();
 
         return "<h2>Your password has been reset successfully.</h2>";
