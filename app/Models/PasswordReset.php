@@ -11,8 +11,9 @@ class PasswordReset extends Model
 
     public $table = "password_reset_tokens";
     public $timestamps = false;
-    //protected $primaryKey = 'email';
-
+    protected $primaryKey = 'email';
+    public $incrementing = false;
+    protected $keyType = 'string';
     protected $fillable = [
         'email',
         'token',

@@ -13,7 +13,7 @@
 
 <form action="{{ route('resetPassword') }}" method="POST">
     @csrf
-    <input type="hidden" name="id" value="{{ $user[0]['id'] }}">
+    <input type="hidden" name="id" value="{{ $user }}">
     <input type="password" name="password" placeholder="Enter password">
     <br><br>
     <input type="password" name="password_confirmation" placeholder="Enter confirm password">
