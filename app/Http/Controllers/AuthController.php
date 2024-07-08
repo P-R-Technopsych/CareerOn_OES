@@ -165,8 +165,6 @@ class AuthController extends Controller
 
         $user = User::find($request->id);
 
-        echo "$user";
-
         $user->password = Hash::make($request->password);
         $user->save();
         PasswordReset::where('email',$user->email)->delete();
