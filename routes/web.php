@@ -7,6 +7,7 @@ use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\StudentMiddleware;
 use App\Mail\HelloMail;
 use Illuminate\Support\Facades\Mail;
+use App\Http\Controllers\AdminController;
 
 Route::get('/',function(){
     return redirect('/register');
@@ -30,3 +31,7 @@ Route::post('/reset-password',[AuthController::class, 'resetPassword'])->name('r
 Route::get('/dashboard',[AuthController::class, 'loadDashboard'])->middleware(StudentMiddleware::class);
 
 Route::get('/admin/dashboard',[AuthController::class, 'adminDashboard'])->middleware(AdminMiddleware::class);
+
+//subjects route
+Route::post('/add-subject',[AdminController::class, 'addSubject'])->name('addSubject')->middleware(AdminMiddleware::class);
+
