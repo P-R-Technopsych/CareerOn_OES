@@ -7,7 +7,7 @@ use App\Models\Subject;
 
 class AdminController extends Controller
 {
-    //
+    //add subject
     public function addSubject(Request $request){
         try {
 
@@ -15,9 +15,32 @@ class AdminController extends Controller
                 'subject' => $request->subject
             ]);
 
-            return response()->json(['success'=>true,'msg'=>'subject added Successfully!']);
+            return response()->json(['success'=>true,'msg'=>'Subject added Successfully!']);
         } catch (\Exception $e) {
             return response()->json(['success'=>false,'msg'=>$e->getMessage()]);
         };
     }
+
+    //edit subject
+    public function editSubject(Request $request){
+        try {
+            $subject = Subject::find($request->id);
+            $subject->subject = $request->subject;
+            $subject->save();
+            return response()->json(['success'=>true,'msg'=>'Subject updated Successfully!']);
+        } catch (\Exception $e) {
+            return response()->json(['success'=>false,'msg'=>$e->getMessage()]);
+        };
+    }
+
+    //delete subject
+    public function deleteSubject(Request $request){
+        try {
+            Subject::where('id',$request->id)->delete();
+            return response()->json(['success'=>true,'msg'=>'Subject deleted Successfully!']);
+        } catch (\Exception $e) {
+            return response()->json(['success'=>false,'msg'=>$e->getMessage()]);
+        };
+    }
+
 }

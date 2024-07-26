@@ -34,4 +34,5 @@ Route::get('/admin/dashboard',[AuthController::class, 'adminDashboard'])->middle
 
 //subjects route
 Route::post('/add-subject',[AdminController::class, 'addSubject'])->name('addSubject')->middleware(AdminMiddleware::class);
-
+Route::post('/edit-subject',[AdminController::class, 'editSubject'])->name('editSubject')->middleware(AdminMiddleware::class);
+Route::post('/delete-subject',[AdminController::class, 'deleteSubject'])->name('deleteSubject')->middleware(AdminMiddleware::class);
