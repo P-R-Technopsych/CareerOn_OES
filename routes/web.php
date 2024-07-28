@@ -8,6 +8,7 @@ use App\Http\Middleware\StudentMiddleware;
 use App\Mail\HelloMail;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ExamController;
 
 Route::get('/',function(){
     return redirect('/register');
@@ -29,6 +30,7 @@ Route::get('/reset-password',[AuthController::class, 'resetPasswordLoad']);
 Route::post('/reset-password',[AuthController::class, 'resetPassword'])->name('resetPassword');
 
 Route::get('/dashboard',[AuthController::class, 'loadDashboard'])->middleware(StudentMiddleware::class);
+Route::get('/exam/{id}',[ExamController::class, 'loadExamDashboard'])->middleware(StudentMiddleware::class);
 
 Route::get('/admin/dashboard',[AuthController::class, 'adminDashboard'])->middleware(AdminMiddleware::class);
 
