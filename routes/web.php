@@ -36,3 +36,7 @@ Route::get('/admin/dashboard',[AuthController::class, 'adminDashboard'])->middle
 Route::post('/add-subject',[AdminController::class, 'addSubject'])->name('addSubject')->middleware(AdminMiddleware::class);
 Route::post('/edit-subject',[AdminController::class, 'editSubject'])->name('editSubject')->middleware(AdminMiddleware::class);
 Route::post('/delete-subject',[AdminController::class, 'deleteSubject'])->name('deleteSubject')->middleware(AdminMiddleware::class);
+
+//exam route
+Route::get('/admin/exam',[AdminController::class, 'examDashboard'])->middleware(AdminMiddleware::class);
+Route::post('/add-exam',[AdminController::class, 'addExam'])->name('addExam')->middleware(AdminMiddleware::class);
