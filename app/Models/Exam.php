@@ -13,11 +13,13 @@ class Exam extends Model
         'exam_name',
         'subject_id',
         'date',
-        'time'
+        'time',
+        'attempt'
     ];
 
     public function subjects(){
         return $this->hasMany(Subject::class,'id','subject_id');
+        //return $this->belongsTo(Subject::class, 'subject_id', 'id');
     }
 
 }
