@@ -40,3 +40,11 @@ Route::post('/delete-subject',[AdminController::class, 'deleteSubject'])->name('
 //exam route
 Route::get('/admin/exam',[AdminController::class, 'examDashboard'])->middleware(AdminMiddleware::class);
 Route::post('/add-exam',[AdminController::class, 'addExam'])->name('addExam')->middleware(AdminMiddleware::class);
+Route::get('/get-exam-detail/{id}',[AdminController::class, 'getExamDetail'])->name('getExamDetail')->middleware(AdminMiddleware::class);
+Route::post('/update-exam',[AdminController::class, 'updateExam'])->name('updateExam')->middleware(AdminMiddleware::class);
+Route::post('/delete-exam',[AdminController::class, 'deleteExam'])->name('deleteExam')->middleware(AdminMiddleware::class);
+
+//Q&A route
+Route::get('/admin/qna-ans',[AdminController::class, 'qnaDashboard'])->middleware(AdminMiddleware::class);
+Route::post('/add-qna-ans',[AdminController::class, 'addQna'])->name('addQna')->middleware(AdminMiddleware::class);
+
