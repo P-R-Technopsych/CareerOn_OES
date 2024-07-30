@@ -47,4 +47,6 @@ Route::post('/delete-exam',[AdminController::class, 'deleteExam'])->name('delete
 //Q&A route
 Route::get('/admin/qna-ans',[AdminController::class, 'qnaDashboard'])->middleware(AdminMiddleware::class);
 Route::post('/add-qna-ans',[AdminController::class, 'addQna'])->name('addQna')->middleware(AdminMiddleware::class);
-
+Route::get('/get-qna-details',[AdminController::class, 'getQnaDetails'])->name('getQnaDetails')->middleware(AdminMiddleware::class);
+Route::get('/delete-ans',[AdminController::class, 'deleteAns'])->name('deleteAns')->middleware(AdminMiddleware::class);
+Route::post('/update-qna-ans',[AdminController::class, 'updateQna'])->name('updateQna')->middleware(AdminMiddleware::class);
