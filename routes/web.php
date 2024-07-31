@@ -50,3 +50,8 @@ Route::post('/add-qna-ans',[AdminController::class, 'addQna'])->name('addQna')->
 Route::get('/get-qna-details',[AdminController::class, 'getQnaDetails'])->name('getQnaDetails')->middleware(AdminMiddleware::class);
 Route::get('/delete-ans',[AdminController::class, 'deleteAns'])->name('deleteAns')->middleware(AdminMiddleware::class);
 Route::post('/update-qna-ans',[AdminController::class, 'updateQna'])->name('updateQna')->middleware(AdminMiddleware::class);
+Route::post('/delete-qna-ans',[AdminController::class, 'deleteQna'])->name('deleteQna')->middleware(AdminMiddleware::class);
+Route::post('/import-qna-ans',[AdminController::class, 'importQna'])->name('importQna')->middleware(AdminMiddleware::class);
+
+//Students showing in admin routing
+Route::get('/admin/students',[AdminController::class, 'studentsDashboard'])->middleware(AdminMiddleware::class);

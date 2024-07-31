@@ -151,7 +151,7 @@
         @csrf
             <div class="modal-body">
               <input type="hidden" name="exam_id" id="deleteExamId"  >
-              <p>are you sure you want to DeleteExam?</p>
+              <p>are you sure you want to Delete Exam?</p>
             </div>
             <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

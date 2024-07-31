@@ -8,12 +8,18 @@
   Add Q&A
 </button>
 
+<button type="button" class="btn btn-info" data-toggle="modal" data-target="#importQnaModel">
+  Import Q&A
+</button>
+
+
 <table class="table">
     <thead>
         <th>#</th>
         <th>Question</th>
         <th>Answers</th>
         <th>Edit</th>
+        <th>Delete</th>
     </thead>
     <tbody>
         @if(count($questions) > 0 )
@@ -26,6 +32,9 @@
                     </td>
                     <td>
                         <button class="btn btn-info editButton" data-id="{{ $question->id }}" data-toggle="modal" data-target="#editQnaModel">Edit</button>
+                    </td>
+                    <td>
+                        <button class="btn btn-danger deleteButton" data-id="{{ $question->id }}" data-toggle="modal" data-target="#deleteQnaModel">Delete</button>
                     </td>
                 </tr>
             @endforeach
@@ -134,6 +143,60 @@
       </div>
   </div>
 </div>
+
+
+<!-- delete Q&A Modal -->
+<div class="modal fade" id="deleteQnaModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Delete Q&A</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form id="deleteQna">
+        @csrf
+            <div class="modal-body">
+              <input type="hidden" name="id" id="delete_qna_id">
+              <p>are you sure you want to Delete Q&A?</p>
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-danger">Delete</button>
+            </div>
+            </form>
+      </div>
+  </div>
+</div>
+
+<!-- import Q&A Modal -->
+<div class="modal fade" id="importQnaModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Import Q&A</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form id="importQna" enctype="multipart/form-data">
+        @csrf
+            <div class="modal-body">
+                <input type="file" name="file" id="fileupload" required accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet , application/vnd.ms.excel">
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-info">Import Q&A</button>
+            </div>
+            </form>
+      </div>
+  </div>
+</div>
+
+
 
 <script>
     $(document).ready( function(){
@@ -386,7 +449,60 @@
 
         });
 
+        //delete Q&A
+        $('.deleteButton').click(function(){
+            var id = $(this).attr('data-id');
+            $('#delete_qna_id').val(id);
+        });
 
+        $('#deleteQna').submit(function(e){
+            e.preventDefault();
+
+            var formData = $(this).serialize();
+
+            $.ajax({
+                url:"{{ route('deleteQna') }}",
+                type:"POST",
+                data:formData,
+                success:function(data){
+                    if (data.success == true) {
+                        location.reload();
+                    } else {
+                        alert(data.msg);
+                    }
+                }
+            });
+        });
+
+        //import Q&A
+        $('#importQna').submit(function(e){
+            e.preventDefault();
+
+            let formData = new FormData();
+            formData.append("file",fileupload.files[0]);
+
+            $.ajaxSetup({
+                headers:{
+                    "X-CSRF-TOKEN":"{{ csrf_token() }}"
+                }
+            });
+
+            $.ajax({
+                url:"{{ route('importQna') }}",
+                type:"POST",
+                data:formData,
+                processData:false,
+                contentType:false,
+                success:function(data){
+                    console.log(data);
+                    if (data.success == true) {
+                        location.reload();
+                    } else {
+                        alert(data.msg);
+                    }
+                }
+            });
+        });
 
 
     } );
