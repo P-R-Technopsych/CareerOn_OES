@@ -23,9 +23,10 @@
     </thead>
     <tbody>
         @if(count($questions) > 0 )
+            @php $s_no = 1; @endphp
             @foreach($questions as $question)
                 <tr>
-                    <td>{{ $question->id }}</td>
+                    <td>{{ $s_no }}</td><!--<td>{{ $question->id }}</td>-->
                     <td>{{ $question->question }}</td>
                     <td>
                         <a href="#" class="ansButton" data-id="{{ $question->id }}" data-toggle="modal" data-target="#showAnsModel">See Answers </a>
@@ -37,6 +38,7 @@
                         <button class="btn btn-danger deleteButton" data-id="{{ $question->id }}" data-toggle="modal" data-target="#deleteQnaModel">Delete</button>
                     </td>
                 </tr>
+                @php $s_no++; @endphp
             @endforeach
         @else
             <tr>

@@ -25,9 +25,10 @@
   <tbody>
     
     @if(count($exams) > 0 )
+       @php $s_no=1 @endphp
       @foreach($exams as $exam)
          <tr>
-            <td>{{ $exam->id }}</td>
+            <td>{{ $s_no }}</td><!--<td>{{ $exam->id }}</td> -->
             <td>{{ $exam->exam_name }}</td>
             <td>@if($exam->subjects->isNotEmpty())
                 {{ $exam->subjects->first()->subject }}
@@ -44,6 +45,7 @@
               <button class="btn btn-danger deleteButton" data-id="{{ $exam->id }}" data-toggle="modal" data-target="#deleteExamModel" >Delete</button>
             </td>
          </tr>
+         @php $s_no++; @endphp
       @endforeach
     @else
       <tr>

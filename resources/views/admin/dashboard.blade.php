@@ -20,10 +20,12 @@
   <tbody>
 
   @if(count($subjects) > 0)
-
+  @php 
+      $s_no = 1;
+  @endphp
   @foreach($subjects as $subject)
      <tr>
-        <td>{{ $subject->id }}</td>
+     <td>{{ $s_no }}</td><!--<td>{{ $subject->id }}</td> -->
         <td>{{ $subject->subject }}</td>
         <td>
           <button class="btn btn-info editButton" data-id="{{ $subject->id }}" data-subject="{{ $subject->subject }}" data-toggle="modal" data-target="#editSubjectModel" >Edit</button>
@@ -32,6 +34,7 @@
         <button class="btn btn-danger deleteButton" data-id="{{ $subject->id }}" data-toggle="modal" data-target="#deleteSubjectModel" >Delete</button>
         </td>
      </tr>
+     @php $s_no++; @endphp
   @endforeach
 
   @else
