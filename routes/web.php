@@ -58,3 +58,9 @@ Route::get('/admin/students',[AdminController::class, 'studentsDashboard'])->mid
 Route::post('/add-student',[AdminController::class, 'addStudent'])->name('addStudent')->middleware(AdminMiddleware::class);
 Route::post('/edit-student',[AdminController::class, 'editStudent'])->name('editStudent')->middleware(AdminMiddleware::class);
 Route::post('/delete-student',[AdminController::class, 'deleteStudent'])->name('deleteStudent')->middleware(AdminMiddleware::class);
+
+//qna exams routing
+Route::get('/get-questions',[AdminController::class, 'getQuestions'])->name('getQuestions')->middleware(AdminMiddleware::class);
+Route::post('/add-questions',[AdminController::class, 'addQuestions'])->name('addQuestions')->middleware(AdminMiddleware::class);
+Route::get('/get-exam-questions',[AdminController::class, 'getExamQuestions'])->name('getExamQuestions')->middleware(AdminMiddleware::class);
+Route::get('/delete-exam-questions',[AdminController::class, 'deleteExamQuestions'])->name('deleteExamQuestions')->middleware(AdminMiddleware::class);
