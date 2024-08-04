@@ -17,9 +17,15 @@ class Exam extends Model
         'attempt'
     ];
 
-    public function subjects(){
-        return $this->hasMany(Subject::class,'id','subject_id');
+    public function subjects()
+    {
+        return $this->hasMany(Subject::class, 'id', 'subject_id');
         //return $this->belongsTo(Subject::class, 'subject_id', 'id');
     }
 
+    public function getQnaExam()
+    {
+        return $this->hasMany(QnaExam::class, 'exam_id', 'id');
+        //return $this->belongsTo(Subject::class, 'subject_id', 'id');
+    }
 }
