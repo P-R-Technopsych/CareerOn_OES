@@ -17,6 +17,8 @@
       <th>Date</th>
       <th>Time</th>
       <th>Attempt</th>
+      <th>Add Questions</th>
+      <th>show Questions</th>
       <th>Edit</th>
       <th>Delete</th>
     </tr>
@@ -25,9 +27,10 @@
   <tbody>
     
     @if(count($exams) > 0 )
+       @php $s_no=1 @endphp
       @foreach($exams as $exam)
          <tr>
-            <td>{{ $exam->id }}</td>
+            <td>{{ $s_no }}</td><!--<td>{{ $exam->id }}</td> -->
             <td>{{ $exam->exam_name }}</td>
             <td>@if($exam->subjects->isNotEmpty())
                 {{ $exam->subjects->first()->subject }}
@@ -38,12 +41,19 @@
             <td>{{ $exam->time }} Hrs</td>
             <td>{{ $exam->attempt }} Time</td>
             <td>
+              <a href="#" class = "addQuestion" data-id="{{ $exam->id }}" data-toggle="modal" data-target="#addQnaModel">Add Questions</a>
+            </td>
+            <td>
+              <a href="#" class = "seeQuestions" data-id="{{ $exam->id }}" data-toggle="modal" data-target="#seeQnaModel">See Questions</a>
+            </td>
+            <td>
               <button class="btn btn-info editButton" data-id="{{ $exam->id }}" data-toggle="modal" data-target="#editExamModel" >Edit</button>
             </td>
             <td>
               <button class="btn btn-danger deleteButton" data-id="{{ $exam->id }}" data-toggle="modal" data-target="#deleteExamModel" >Delete</button>
             </td>
          </tr>
+         @php $s_no++; @endphp
       @endforeach
     @else
       <tr>
@@ -92,6 +102,7 @@
       </div>
   </div>
 </div>
+
 
 <!-- edit Exam Modal -->
 <div class="modal fade" id="editExamModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -151,7 +162,7 @@
         @csrf
             <div class="modal-body">
               <input type="hidden" name="exam_id" id="deleteExamId"  >
-              <p>are you sure you want to DeleteExam?</p>
+              <p>are you sure you want to Delete Exam?</p>
             </div>
             <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -162,6 +173,71 @@
   </div>
 </div>
 
+<!-- Add Question Modal -->
+<div class="modal fade" id="addQnaModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Add Q&A</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form id="addQna">
+        @csrf
+            <div class="modal-body">
+              <input type="hidden" name="exam_id" id = "addExamId">
+              <input type="search" name="search" id="search" onkeyup="searchTable()"  class="w-100" placeholder="Search here" >
+              <br><br>
+              <table class="table" id="questionsTable" >
+                <thead>
+                  <th>Select</th>
+                  <th>Question</th>
+                </thead>
+                <tbody class="addBody">
+
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Add Q&A</button>
+            </div>
+            </form>
+      </div>
+  </div>
+</div>
+
+<!-- See Questions Modal -->
+<div class="modal fade" id="seeQnaModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Questions</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+            <div class="modal-body">
+              <table class="table" id="questionsTable" >
+                <thead>
+                  <th>S.No</th>
+                  <th>Question</th>
+                  <th>Delete</th>
+                </thead>
+                <tbody class="seeQuestionTable">
+                  
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+      </div>
+  </div>
+</div>
 
 
 <!-- Include Flatpickr CSS and JS -->
@@ -298,8 +374,160 @@
 
     });
 
+    //add questions part
+    $('.addQuestion').click(function(){
+
+      var id = $(this).attr('data-id');
+      $('#addExamId').val(id);
+
+      $.ajax({
+        url:"{{ route('getQuestions'); }}",
+        type:"GET",
+        data:{exam_id : id},
+        success:function(data){
+          if (data.success == true) {
+            
+            var questions = data.data;
+            var html = '';
+            if (questions.length > 0 ) {
+              for (let i = 0; i < questions.length; i++) {
+                html += `
+                    <tr>
+                        <td> <input type="checkbox" value="`+questions[i]['id']+`" name="questions_ids[]" ></td>
+                        <td>`+questions[i]['questions']+`</td>
+                    </tr>
+                `;
+              }
+            }
+            else{
+              html += `
+              <tr>
+                  <td colspan="2" >Questions not Available!</td>
+              </tr>
+              `;
+            }
+
+            $('.addBody').html(html);
+
+          } else {
+            alert(data.msg);
+          }
+        }
+      });
+
+    });
+
+    $("#addQna").submit(function(e){
+        e.preventDefault();
+
+        var formData = $(this).serialize();
+
+        $.ajax({
+            url:"{{ route('addQuestions') }}",
+            type:"POST",
+            data:formData,
+            success:function(data){
+                if(data.success == true){
+                    location.reload();
+                }
+                else{
+                    alert(data.msg);
+                }
+            }
+        });
+
+    });
+
+    //see questions
+    $('.seeQuestions').click(function(){
+      var id = $(this).attr('data-id');
+
+      $.ajax({
+        url:"{{ route('getExamQuestions') }}",
+        type:"GET",
+        data:{exam_id:id},
+        success:function(data){
+          console.log(data);
+
+          var html = '';
+          var questions = data.data;
+          if (questions.length > 0 ) {
+            
+              for (let i = 0; i < questions.length; i++) {
+                  html += `
+                  <tr>
+                      <td>`+(i+1)+`</td>
+                      <td>`+questions[i]['question'][0]['question']+`</td>
+                      <td>
+                          <button class="btn btn-danger deleteQuestion" data-id="`+questions[i]['id']+`" >Delete</button>
+                      </td>
+                  </tr>
+                  `;
+              }
+
+          }
+          else{
+              html += `
+                  <tr>
+                      <td colspan="1" >Questions not Available!</td>
+                  </tr>
+              `;
+          }
+
+          $(".seeQuestionTable").html(html);
+
+        }
+      });
+    });
+
+    //delete question
+    $(document).on('click' ,'.deleteQuestion', function(){
+        
+        var id = $(this).attr('data-id');
+        var obj = $(this);
+        $.ajax({
+            url:"{{ route('deleteExamQuestions') }}",
+            type:"GET",
+            data:{id:id},
+            success:function(data){
+              if (data.success == true ) {
+                obj.parent().parent().remove();
+              } else {
+                alert(data.msg);
+              }
+            }
+        });
+
+    } );
+
+
   });
 
 
 </script>
+
+<script>
+  function searchTable(){
+    var input, filter, table, tr, td, i, txtValue;
+    input = document.getElementById('search');
+    filter = input.value.toUpperCase();
+    table = document.getElementById('questionsTable');
+    tr = table.getElementsByTagName("tr");
+
+    for (i=0; i < tr.length; i++) {
+      td = tr[i].getElementsByTagName("td")[1];
+      if(td){
+        txtValue = td.textContent || td.innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1 ) {
+          tr[i].style.display = "";
+        }
+        else{
+          tr[i].style.display = "none";
+        }
+      }
+    }
+
+  }  //questionsTable
+</script>
+
 @endsection

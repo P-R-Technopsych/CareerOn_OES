@@ -49,4 +49,20 @@ Route::post('/delete-exam',[AdminController::class, 'deleteExam'])->name('delete
 //Q&A route
 Route::get('/admin/qna-ans',[AdminController::class, 'qnaDashboard'])->middleware(AdminMiddleware::class);
 Route::post('/add-qna-ans',[AdminController::class, 'addQna'])->name('addQna')->middleware(AdminMiddleware::class);
+Route::get('/get-qna-details',[AdminController::class, 'getQnaDetails'])->name('getQnaDetails')->middleware(AdminMiddleware::class);
+Route::get('/delete-ans',[AdminController::class, 'deleteAns'])->name('deleteAns')->middleware(AdminMiddleware::class);
+Route::post('/update-qna-ans',[AdminController::class, 'updateQna'])->name('updateQna')->middleware(AdminMiddleware::class);
+Route::post('/delete-qna-ans',[AdminController::class, 'deleteQna'])->name('deleteQna')->middleware(AdminMiddleware::class);
+Route::post('/import-qna-ans',[AdminController::class, 'importQna'])->name('importQna')->middleware(AdminMiddleware::class);
 
+//Students showing in admin routing
+Route::get('/admin/students',[AdminController::class, 'studentsDashboard'])->middleware(AdminMiddleware::class);
+Route::post('/add-student',[AdminController::class, 'addStudent'])->name('addStudent')->middleware(AdminMiddleware::class);
+Route::post('/edit-student',[AdminController::class, 'editStudent'])->name('editStudent')->middleware(AdminMiddleware::class);
+Route::post('/delete-student',[AdminController::class, 'deleteStudent'])->name('deleteStudent')->middleware(AdminMiddleware::class);
+
+//qna exams routing
+Route::get('/get-questions',[AdminController::class, 'getQuestions'])->name('getQuestions')->middleware(AdminMiddleware::class);
+Route::post('/add-questions',[AdminController::class, 'addQuestions'])->name('addQuestions')->middleware(AdminMiddleware::class);
+Route::get('/get-exam-questions',[AdminController::class, 'getExamQuestions'])->name('getExamQuestions')->middleware(AdminMiddleware::class);
+Route::get('/delete-exam-questions',[AdminController::class, 'deleteExamQuestions'])->name('deleteExamQuestions')->middleware(AdminMiddleware::class);
