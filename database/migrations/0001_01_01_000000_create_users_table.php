@@ -6,6 +6,25 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('users');
+        Schema::dropIfExists('password_reset_tokens');
+        Schema::dropIfExists('sessions');
+        Schema::dropIfExists('subjects');
+        Schema::dropIfExists('exams');
+        Schema::dropIfExists('answers');
+        Schema::dropIfExists('questions');
+        Schema::dropIfExists('qna_exams');
+        Schema::dropIfExists('exams_attempts');
+        Schema::dropIfExists('exams_answers');
+    }
+
     /**
      * Run the migrations.
      */
@@ -36,15 +55,72 @@ return new class extends Migration
             $table->longText('payload');
             $table->integer('last_activity')->index();
         });
-    }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
-    {
-        Schema::dropIfExists('users');
-        Schema::dropIfExists('password_reset_tokens');
-        Schema::dropIfExists('sessions');
+        Schema::create('subjects', function (Blueprint $table) {
+            $table->id();
+            $table->string('subject', 255);
+            $table->timestamps();
+        });
+
+        Schema::create('exams', function (Blueprint $table) {
+            $table->id();
+            $table->string('exam_name', 255);
+            $table->float('marks')->default(0);
+            $table->float('pass_marks')->default(0);
+            $table->foreignId('subject_id')->constrained('subjects');
+            $table->string('entrance_id', 255);
+            $table->string('date', 255);
+            $table->string('time', 255);
+            $table->integer('attempt')->default(0);
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent();
+        });
+
+        Schema::create('exam_attempts', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('exam_id')->constrained('exams');
+            $table->foreignId('user_id')->constrained('users');
+            $table->integer('status')->default(0);
+            $table->float('marks')->nullable();
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent();
+        });
+
+
+        Schema::create('questions', function (Blueprint $table) {
+            $table->id();
+            $table->string('question', 500);
+            $table->text('explaination')->nullable();
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent();
+        });
+
+
+        Schema::create('answers', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('questions_id')->constrained('questions');
+            $table->string('answer', 500);
+            $table->boolean('is_correct');
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent();
+        });
+
+
+        Schema::create('exams_answers', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('attempt_id')->constrained('exam_attempts');
+            $table->foreignId('question_id')->constrained('questions');
+            $table->foreignId('answer_id')->constrained('answers');
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent();
+        });
+
+        Schema::create('qna_exams', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('exam_id')->constrained('exams');
+            $table->foreignId('question_id')->constrained('questions');
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent();
+        });
     }
 };

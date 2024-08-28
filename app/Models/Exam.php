@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\ExamAttempt;
+use Illuminate\Support\Facades\Auth;
 
 class Exam extends Model
 {
@@ -15,7 +16,8 @@ class Exam extends Model
         'subject_id',
         'date',
         'time',
-        'attempt'
+        'attempt',
+        'entrance_id'
     ];
 
     protected $appends = ['attempt_counter'];
@@ -36,7 +38,7 @@ class Exam extends Model
 
     public function getIdAttribute($value)
     {
-        $attemptCount = ExamAttempt::where(['exam_id' => $value, 'user_id' => auth()->user()->id])->count();
+        $attemptCount = ExamAttempt::where(['exam_id' => $value, 'user_id' => Auth::user()->id])->count();
         $this->count = $attemptCount;
         return $value;
     }

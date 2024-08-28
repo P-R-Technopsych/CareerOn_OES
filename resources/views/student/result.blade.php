@@ -41,8 +41,6 @@
                                     data-target="#reviewQnaModal">Review Q&A</a>
                             @endif
                         </td>
-                        <td>{{ count($attempt->getQnaExam) * $attempt->marks }}</td>
-                        <td>{{ $attempt->pass_marks }}</td>
                     </tr>
                 @endforeach
             @else
@@ -67,6 +65,29 @@
                     @csrf
                     <div class="modal-body review-exam">
                         Loading ...
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="explainationModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Explaination</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="reviewExamForm">
+                    @csrf
+                    <div class="modal-body explaination">
+                        <p id="explaination"></p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -117,7 +138,19 @@
                                     '<div class = "row" > <div class = "col-sm-12"><h6>Q(' +
                                     (i + 1) + '). ' + data[i]['question']['question'] +
                                     '</h6><p>Ans: ' + answer + ' ' + is_correct +
-                                    ' </p></div></div>';
+                                    ' </p>';
+
+                                console.log(data[i]['question']['explaination'] != null);
+
+
+                                if (data[i]['question']['explaination'] != null) {
+                                    html +=
+                                        '<p><a href="#" class="explaination" data-explaination="' +
+                                        data[i]['question']['explaination'] +
+                                        '" data-toggle="modal" data-target="#explainationModal">Explaination</a></p>';
+                                }
+
+                                html += '</div></div>';
 
 
                             }
@@ -131,6 +164,13 @@
                     }
                     $('.review-exam').html(html);
                 }
+            });
+
+            $(document).on('click', '.explaination', function() {
+
+                var explaination = $(this).attr('data-explaination');
+                $('#explaination').text(explaination);
+
             });
 
         });

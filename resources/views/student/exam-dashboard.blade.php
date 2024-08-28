@@ -17,7 +17,7 @@
                 <h4 class="text-right time">{{ $exam[0]['time'] }}</h4>
                 <form action="{{ route('examSubmit') }}" method="POST" class="mb-5" id="exam_form"">
                     @csrf
-                    <input type="text" name="exam_id" value="{{ $exam[0]['id'] }}">
+                    <input type="hidden" name="exam_id" value="{{ $exam[0]['id'] }}">
                     @php
                         $qcount = 1;
                     @endphp
@@ -29,8 +29,8 @@
                                 $acount = 'A';
                             @endphp
                             <h5><b>Q{{ $qcount++ }}.</b> {{ $data['question'][0]['question'] }}</h5>
-                            <input type="text" name="q[]" value="{{ $data['question'][0]['id'] }}">
-                            <input type="text" name="ans_{{ $qcount - 1 }}" id="ans_{{ $qcount - 1 }}">
+                            <input type="hidden" name="q[]" value="{{ $data['question'][0]['id'] }}">
+                            <input type="hidden" name="ans_{{ $qcount - 1 }}" id="ans_{{ $qcount - 1 }}">
                             @foreach ($answers as $answer)
                                 <p style="color: #808080;"><b>{{ $acount++ }}) </b>{{ $answer['answer'] }}
                                     <input type="radio" name="radio_{{ $qcount - 1 }}" data-id="{{ $qcount - 1 }}"

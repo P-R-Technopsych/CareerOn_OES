@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ExportStudent;
 use Illuminate\Http\Request;
 use App\Models\Subject;
 use App\Models\Exam;
@@ -76,13 +77,15 @@ class AdminController extends Controller
     {
         try {
             $unique_id = uniqid('exam-token');
+            $exam = new Exam();
+
             Exam::insert([
                 'exam_name' => $request->exam_name,
                 'subject_id' => $request->subject_id,
                 'date' => $request->date,
                 'time' => $request->time,
                 'attempt' => $request->attempt,
-                'entrance_id' => $unique_id
+                'entrance_id' => $unique_id,
             ]);
 
             return response()->json(['success' => true, 'msg' => 'Exam added Successfully!']);
@@ -142,8 +145,16 @@ class AdminController extends Controller
     public function addQna(Request $request)
     {
         try {
+
+            $explaination = null;
+
+            if (isset($request->explaination)) {
+                $explaination = $request->explaination;
+            }
+
             $questionId = Question::insertGetId([
-                'question' => $request->question
+                'question' => $request->question,
+                'explaination' => $explaination,
             ]);
 
             foreach ($request->answers as $answer) {
@@ -182,9 +193,20 @@ class AdminController extends Controller
     //update question and answers
     public function updateQna(Request $request)
     {
+
         try {
+
+            $explaination = null;
+
+            if (isset($request->explaination)) {
+                $explaination = $request->explaination;
+            }
+
+
+
             Question::where('id', $request->question_id)->update([
-                'question' => $request->question
+                'question' => $request->question,
+                'explaination' => $explaination,
             ]);
 
             //old answers update
@@ -253,7 +275,7 @@ class AdminController extends Controller
     public function studentsDashboard()
     {
         $students = User::where('is_admin', 0)->get();
-        return view('admin.studentsDashboard', compact('students'));
+        return view('admin.usersDashboard', compact('students'));
     }
 
     //add Student
@@ -319,6 +341,14 @@ class AdminController extends Controller
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'msg' => $e->getMessage()]);
         };
+    }
+
+    //export Students
+
+    public function exportStudents()
+    {
+
+        return Excel::download(new ExportStudent, 'students_CareerOn_OES.xlsx');
     }
 
     //get questions
@@ -399,7 +429,7 @@ class AdminController extends Controller
     public function updateMarks(Request $request)
     {
         try {
-            Exam::where('id', $request->exam_id)->update(['marks' => $request->marks]);
+            Exam::where('id', $request->exam_id)->update(['marks' => $request->marks, 'pass_marks' => $request->pass_marks]);
             return response()->json(['success' => true, 'msg' => 'Marks Updated!']);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'msg' => $e->getMessage()]);

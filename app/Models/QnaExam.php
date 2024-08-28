@@ -10,7 +10,7 @@ class QnaExam extends Model
     use HasFactory;
 
     public $table = 'qna_exams';
-    protected $fillable = ['exam_id', 'question_id'];
+    protected $fillable = ['exam_id', 'question_id',];
 
 
     public function question()

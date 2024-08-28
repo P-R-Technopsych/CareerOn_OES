@@ -14,7 +14,8 @@ class ExamAnswer extends Model
     protected $fillable = [
         'attempt_id',
         'question_id',
-        'answer_id'
+        'answer_id',
+
     ];
 
     public function question()

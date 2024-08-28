@@ -16,9 +16,10 @@ class ExamController extends Controller
     {
         $qnaExam = Exam::where('entrance_id', $id)->with('getQnaExam')->get();
 
+
         if (count($qnaExam) > 0) {
 
-            $attemptCount = ExamAttempt::where(['exam_id' => $qnaExam[0]['id'], 'user_id' => auth()->user()->id])->count();
+            $attemptCount = ExamAttempt::where(['exam_id' => $qnaExam[0]['id'], 'user_id' => Auth::user()->id])->count();
 
             if ($attemptCount >= $qnaExam[0]['attempt']) {
                 return view('student.exam-dashboard', ['success' => false, 'msg' => 'Your exam attemption limit exceeded ' . $qnaExam[0]['date'], 'exam' => $qnaExam]);
@@ -66,7 +67,7 @@ class ExamController extends Controller
 
     public function resultdashboard()
     {
-        $attempts = ExamAttempt::where('user_id', Auth()->user()->id)->with('exam')->orderBy('updated_at')->get();
+        $attempts = ExamAttempt::where('user_id', Auth::user()->id)->with('exam')->orderBy('updated_at')->get();
         return view('student.result', compact('attempts'));
     }
 
