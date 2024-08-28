@@ -19,13 +19,14 @@
                 @php $count = 1; @endphp
                 @foreach ($exams as $exam)
                     <tr>
+                        <td style="display:none;">{{ $exam->id }}</td>
                         <td>{{ $count++ }}</td>
                         <td>{{ $exam->exam_name }}</td>
                         <td>{{ $exam->subjects[0]['subject'] }}</td>
                         <td>{{ $exam->date }}</td>
                         <td>{{ $exam->time }} Hrs</td>
                         <td>{{ $exam->attempt }} Time</td>
-                        <td></td>
+                        <td>{{ $exam->attempt - $exam->attempt_counter }}</td>
                         <td><a href="#" data-code="{{ $exam->entrance_id }}" class="copy"><i class="fa fa-copy"></i></a>
                         </td>
                     </tr>

@@ -212,7 +212,7 @@
                                                                     <div class="fullWidth"
                                                                         style="max-width: 357.5px;"><img
                                                                             height="auto"
-                                                                            src="https://i.postimg.cc/jqXDFNf9/cyber-criminal-1.png"
+                                                                            src="https://i.postimg.cc/3wK5wzpc/Exam-Result-NBG.png"
                                                                             style="display: block; height: auto; border: 0; width: 100%;"
                                                                             width="357.5" /></div>
                                                                 </div>
@@ -228,7 +228,8 @@
                                                                 style="padding-top:35px;text-align:center;width:100%;">
                                                                 <h1
                                                                     style="margin: 0; color: #3ba993; direction: ltr; font-family: 'Cabin', Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 28px; font-weight: 400; letter-spacing: normal; line-height: 120%; text-align: center; margin-top: 0; margin-bottom: 0; mso-line-height-alt: 33.6px;">
-                                                                    <strong>Forgot your password?</strong>
+                                                                    <strong>Congratulations!
+                                                                        {{ $data['name'] }},</strong>
                                                                 </h1>
                                                             </td>
                                                         </tr>
@@ -242,10 +243,12 @@
                                                                 style="padding-left:45px;padding-right:45px;">
                                                                 <div
                                                                     style="color:#3ba993;font-family:'Cabin',Arial,'Helvetica Neue',Helvetica,sans-serif;font-size:18px;line-height:150%;text-align:center;mso-line-height-alt:27px;">
-                                                                    <p style="margin: 0;">We received a request to
-                                                                        reset your password.</p>
-                                                                    <p style="margin: 0;">If you didn't make this
-                                                                        request, simply ignore this email.</p>
+                                                                    <p style="margin: 0; white-space: nowrap;">We are
+                                                                        excited to inform you
+                                                                        that your exam result for
+                                                                        {{ $data['exam_name'] }} is out.</p>
+                                                                    <p style="margin: 0;">Thank you for your continued
+                                                                        dedication and hard work.</p>
                                                                 </div>
                                                             </td>
                                                         </tr>
@@ -281,8 +284,8 @@
                                                                 style="padding-bottom:10px;padding-left:45px;padding-right:45px;padding-top:10px;">
                                                                 <div
                                                                     style="color:#3ba993;font-family:'Cabin',Arial,'Helvetica Neue',Helvetica,sans-serif;font-size:13px;line-height:150%;text-align:center;mso-line-height-alt:19.5px;">
-                                                                    <p style="margin: 0;">If you did make this request
-                                                                        just click the button below:</p>
+                                                                    <p style="margin: 0;">To view your detailed
+                                                                        result, just click the button below:</p>
                                                                 </div>
                                                             </td>
                                                         </tr>
@@ -303,8 +306,8 @@
                                                                             style="padding-left:40px;padding-right:40px;font-size:14px;display:inline-block;letter-spacing:normal;"><span
                                                                                 style="word-break:break-word;"><span
                                                                                     data-mce-style=""
-                                                                                    style="line-height: 28px;">RESET MY
-                                                                                    PASSWORD</span></span></span></a><!--[if mso]></center></v:textbox></v:roundrect><![endif]-->
+                                                                                    style="line-height: 28px;">VIEW
+                                                                                    RESULT</span></span></span></a><!--[if mso]></center></v:textbox></v:roundrect><![endif]-->
                                                                 </div>
                                                             </td>
                                                         </tr>
@@ -318,9 +321,10 @@
                                                                 style="padding-bottom:15px;padding-left:10px;padding-right:10px;padding-top:10px;">
                                                                 <div
                                                                     style="color:#3ba993;font-family:'Cabin',Arial,'Helvetica Neue',Helvetica,sans-serif;font-size:10px;line-height:120%;text-align:center;mso-line-height-alt:12px;">
-                                                                    <p style="margin: 0;">If you didn't request to
-                                                                        change your password, you don't have to do
-                                                                        anything. So that's easy.</p>
+                                                                    <p style="margin: 0;">If you have any questions or
+                                                                        concerns regarding your results, feel free to
+                                                                        reach out to our support team at
+                                                                        Info@careeron.in .</p>
                                                                 </div>
                                                             </td>
                                                         </tr>

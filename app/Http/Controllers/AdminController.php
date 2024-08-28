@@ -11,11 +11,14 @@ use App\Models\QnaExam;
 use App\Models\User;
 
 use App\Imports\QnaImport;
+use App\Models\ExamAnswer;
+use App\Models\ExamAttempt;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Hash;
-use Mail;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\URL;
+use PhpParser\Node\Stmt\TryCatch;
 
 class AdminController extends Controller
 {
@@ -72,7 +75,7 @@ class AdminController extends Controller
     public function addExam(Request $request)
     {
         try {
-            $unique_id = uniqid('exam-token?');
+            $unique_id = uniqid('exam-token');
             Exam::insert([
                 'exam_name' => $request->exam_name,
                 'subject_id' => $request->subject_id,
@@ -129,15 +132,10 @@ class AdminController extends Controller
         };
     }
 
-<<<<<<< HEAD
     public function qnaDashboard()
     {
-        return View('admin.qnaDashboard');
-=======
-    public function qnaDashboard(){
         $questions = Question::with('answers')->get();
-        return View('admin.qnaDashboard' , compact('questions') );
->>>>>>> c0385c92df01cc527d895036d7cecd932a18902f
+        return View('admin.qnaDashboard', compact('questions'));
     }
 
     //add Q&A
@@ -167,22 +165,23 @@ class AdminController extends Controller
             return response()->json(['success' => false, 'msg' => $e->getMessage()]);
         };
     }
-<<<<<<< HEAD
-=======
 
-    public function getQnaDetails(Request $request){
-        $qna = Question::where('id',$request->qid)->with('answers')->get();
-        
-        return response()->json( ['data'=>$qna] );
+    public function getQnaDetails(Request $request)
+    {
+        $qna = Question::where('id', $request->qid)->with('answers')->get();
+
+        return response()->json(['data' => $qna]);
     }
 
-    public function deleteAns(Request $request){
-        Answer::where('id',$request->id)->delete();
-        return response()->json(['success'=>true , 'msg'=>'Answer Deleted Successfully!' ]);
+    public function deleteAns(Request $request)
+    {
+        Answer::where('id', $request->id)->delete();
+        return response()->json(['success' => true, 'msg' => 'Answer Deleted Successfully!']);
     }
 
     //update question and answers
-    public function updateQna(Request $request){
+    public function updateQna(Request $request)
+    {
         try {
             Question::where('id', $request->question_id)->update([
                 'question' => $request->question
@@ -190,28 +189,26 @@ class AdminController extends Controller
 
             //old answers update
             if (isset($request->answers)) {
-                
-                foreach($request->answers as $key => $value){
+
+                foreach ($request->answers as $key => $value) {
 
                     $is_correct = 0;
                     if ($request->is_correct == $value) {
                         $is_correct = 1;
                     }
 
-                    Answer::where('id',$key)->update([
+                    Answer::where('id', $key)->update([
                         'questions_id' => $request->question_id,
                         'answer' => $value,
                         'is_correct' => $is_correct
                     ]);
-
                 }
-
             }
 
             //new answers added
             if (isset($request->new_answers)) {
-                
-                foreach($request->new_answers as $answer){
+
+                foreach ($request->new_answers as $answer) {
 
                     $is_correct = 0;
                     if ($request->is_correct == $answer) {
@@ -223,45 +220,45 @@ class AdminController extends Controller
                         'answer' => $answer,
                         'is_correct' => $is_correct
                     ]);
-
                 }
-
             }
 
-            return response()->json(['success'=>true,'msg'=>'Q&A updated successfully!']);
-
+            return response()->json(['success' => true, 'msg' => 'Q&A updated successfully!']);
         } catch (\Exception $e) {
-            return response()->json(['success'=>false,'msg'=>$e->getMessage()]);
+            return response()->json(['success' => false, 'msg' => $e->getMessage()]);
         };
     }
 
-    
-    public function deleteQna(Request $request){
-        Question::where('id',$request->id)->delete();
-        Answer::where('questions_id',$request->id)->delete();
 
-        return response()->json(['success'=>true,'msg'=>'Q&A deleted successfully!']);
+    public function deleteQna(Request $request)
+    {
+        Question::where('id', $request->id)->delete();
+        Answer::where('questions_id', $request->id)->delete();
+
+        return response()->json(['success' => true, 'msg' => 'Q&A deleted successfully!']);
     }
 
-    public function importQna(Request $request){
+    public function importQna(Request $request)
+    {
         try {
-            
-            Excel::import(new QnaImport , $request->file('file'));
 
-            return response()->json(['success'=>true,'msg'=>'Imported Q&A successfully']);
+            Excel::import(new QnaImport, $request->file('file'));
 
+            return response()->json(['success' => true, 'msg' => 'Imported Q&A successfully']);
         } catch (\Exception $e) {
-            return response()->json(['success'=>false,'msg'=>$e->getMessage()]);
+            return response()->json(['success' => false, 'msg' => $e->getMessage()]);
         };
     }
 
-    public function studentsDashboard(){
-        $students = User::where('is_admin',0)->get();
-        return view('admin.studentsDashboard' , compact('students') );
+    public function studentsDashboard()
+    {
+        $students = User::where('is_admin', 0)->get();
+        return view('admin.studentsDashboard', compact('students'));
     }
 
     //add Student
-    public function addStudent(Request $request){
+    public function addStudent(Request $request)
+    {
         try {
             $password = str::random(8);
 
@@ -279,18 +276,18 @@ class AdminController extends Controller
             $data['password'] = $password;
             $data['title'] = "Student Registeration on OES";
 
-            Mail::send('registerationMail', ['data'=>$data] , function($message) use ($data){
-                $message->to($data['email'] )->subject($data['title']);
-            } );
-            return response()->json(['success'=>true,'msg'=>'Student added successfully!']);
-
+            Mail::send('registerationMail', ['data' => $data], function ($message) use ($data) {
+                $message->to($data['email'])->subject($data['title']);
+            });
+            return response()->json(['success' => true, 'msg' => 'Student added successfully!']);
         } catch (\Exception $e) {
-            return response()->json(['success'=>false,'msg'=>$e->getMessage()]);
+            return response()->json(['success' => false, 'msg' => $e->getMessage()]);
         };
     }
 
     //update student
-    public function editStudent(Request $request){
+    public function editStudent(Request $request)
+    {
         try {
 
             $user = User::find($request->id);
@@ -305,94 +302,169 @@ class AdminController extends Controller
             $data['email'] = $request->email;
             $data['title'] = "Updated Student Profile on OES";
 
-            Mail::send('updateProfileMail', ['data'=>$data] , function($message) use ($data){
-                $message->to($data['email'] )->subject($data['title']);
-            } );
-            return response()->json(['success'=>true,'msg'=>'Student updated successfully!']);
-
+            Mail::send('updateProfileMail', ['data' => $data], function ($message) use ($data) {
+                $message->to($data['email'])->subject($data['title']);
+            });
+            return response()->json(['success' => true, 'msg' => 'Student updated successfully!']);
         } catch (\Exception $e) {
-            return response()->json(['success'=>false,'msg'=>$e->getMessage()]);
+            return response()->json(['success' => false, 'msg' => $e->getMessage()]);
         };
     }
 
-    public function deleteStudent(Request $request ){
+    public function deleteStudent(Request $request)
+    {
         try {
-            User::where('id',$request->id)->delete();
-            return response()->json(['success'=>true,'msg'=>"Student Deleted Successfully!"]);
+            User::where('id', $request->id)->delete();
+            return response()->json(['success' => true, 'msg' => "Student Deleted Successfully!"]);
         } catch (\Exception $e) {
-            return response()->json(['success'=>false,'msg'=>$e->getMessage()]);
+            return response()->json(['success' => false, 'msg' => $e->getMessage()]);
         };
     }
 
     //get questions
-    public function getQuestions(Request $request){
-        try{
+    public function getQuestions(Request $request)
+    {
+        try {
             $questions = Question::all();
 
-            if ( count($questions) > 0 ) {
-                
+            if (count($questions) > 0) {
+
                 $data =  [];
                 $counter = 0;
 
-                foreach($questions as $question){
-                    $qnaExam = QnaExam::where(['exam_id' => $request->exam_id, 'question_id'=> $question->id ])->get();
-                    if ( count($qnaExam) == 0 ) {
+                foreach ($questions as $question) {
+                    $qnaExam = QnaExam::where(['exam_id' => $request->exam_id, 'question_id' => $question->id])->get();
+                    if (count($qnaExam) == 0) {
                         $data[$counter]['id'] = $question->id;
                         $data[$counter]['questions'] = $question->question;
                         $counter++;
-                    } 
-                    
+                    }
                 }
-                return response()->json(['success'=>true,'msg'=>"Questions data!" ,'data'=>$data ]);
+                return response()->json(['success' => true, 'msg' => "Questions data!", 'data' => $data]);
+            } else {
+                return response()->json(['success' => false, 'msg' => "Questions not Found!"]);
             }
-            else{
-                return response()->json(['success'=>false,'msg'=>"Questions not Found!"]);
-            }
-
-        }
-        catch (\Exception $e) {
-            return response()->json(['success'=>false,'msg'=>$e->getMessage()]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'msg' => $e->getMessage()]);
         };
     }
 
-    public function addQuestions(Request $request){
+    public function addQuestions(Request $request)
+    {
         try {
-            
+
             if (isset($request->questions_ids)) {
-                
-                foreach($request->questions_ids as $qid){
+
+                foreach ($request->questions_ids as $qid) {
                     QnaExam::insert([
-                        'exam_id'=>$request->exam_id,
-                        'question_id'=>$qid,
+                        'exam_id' => $request->exam_id,
+                        'question_id' => $qid,
                     ]);
                 }
-
             }
-            return response()->json(['success'=>true,'msg'=>'Questions added successfully !']);
+            return response()->json(['success' => true, 'msg' => 'Questions added successfully !']);
         } catch (\Exception $e) {
-            return response()->json(['success'=>false,'msg'=>$e->getMessage()]);
+            return response()->json(['success' => false, 'msg' => $e->getMessage()]);
         };
     }
 
-    public function getExamQuestions(Request $request){
+    public function getExamQuestions(Request $request)
+    {
         try {
-            
-            $data = QnaExam::where('exam_id' , $request->exam_id )->with('question')->get();
-            return response()->json(['success'=>true,'msg'=>'Questions details!' ,'data'=>$data ]);
+
+            $data = QnaExam::where('exam_id', $request->exam_id)->with('question')->get();
+            return response()->json(['success' => true, 'msg' => 'Questions details!', 'data' => $data]);
         } catch (\Exception $e) {
-            return response()->json(['success'=>false,'msg'=>$e->getMessage()]);
+            return response()->json(['success' => false, 'msg' => $e->getMessage()]);
         };
     }
 
-    public function deleteExamQuestions(Request $request){
+    public function deleteExamQuestions(Request $request)
+    {
         try {
-            
-            QnaExam::where('id' , $request->id )->delete();
-            return response()->json(['success'=>true,'msg'=>'Questions deleted!']);
+
+            QnaExam::where('id', $request->id)->delete();
+            return response()->json(['success' => true, 'msg' => 'Questions deleted!']);
         } catch (\Exception $e) {
-            return response()->json(['success'=>false,'msg'=>$e->getMessage()]);
+            return response()->json(['success' => false, 'msg' => $e->getMessage()]);
         };
     }
 
->>>>>>> c0385c92df01cc527d895036d7cecd932a18902f
+    public function loadMarks()
+    {
+        $exams = Exam::with('getQnaExam')->get();
+        return view('admin.marksDashboard', compact('exams'));
+    }
+
+    public function updateMarks(Request $request)
+    {
+        try {
+            Exam::where('id', $request->exam_id)->update(['marks' => $request->marks]);
+            return response()->json(['success' => true, 'msg' => 'Marks Updated!']);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'msg' => $e->getMessage()]);
+        };
+    }
+
+    public function reviewExams()
+    {
+        $attempts = ExamAttempt::with(['user', 'exam'])->orderBy('id')->get();
+        return view('admin.review-exams', compact('attempts'));
+    }
+
+    public function reviewQna(Request $request)
+    {
+
+        try {
+            $attemptData = ExamAnswer::where('attempt_id', $request->attempt_id)->with(['question', 'answer'])->get();
+            return response()->json(['success' => true, 'data' => $attemptData]);
+        } catch (\Throwable $e) {
+            return response()->json(['success' => false, 'msg' => $e->getMessage()]);
+        }
+    }
+
+
+    public function approvedQna(Request $request)
+    {
+
+        try {
+
+            $attemptId = $request->attempt_id;
+
+            $examData = ExamAttempt::where('id', $attemptId)->with('exam')->get();
+
+            $marks = $examData[0]['exam']['marks'];
+
+            $attemptData = ExamAnswer::where('attempt_id', $attemptId)->with('answer')->get();
+
+            $totalMarks = 0;
+
+            if (count($attemptData) > 0) {
+                foreach ($attemptData as $attempt) {
+                    if ($attempt->answer->is_correct == 1) {
+                        $totalMarks += $marks;
+                    }
+                }
+            }
+
+            ExamAttempt::where('id', $attemptId)->update(['status' => 1, 'marks' => $totalMarks]);
+
+            $url = URL::to('/');
+
+            $data['url'] = $url . '/results';
+            $data['name'] = $examData[0]['user']['name'];
+            $data['email'] = $examData[0]['user']['email'];
+            $data['exam_name'] = $examData[0]['exam']['exam_name'];
+            $data['title'] = ' Exam Result';
+
+            Mail::send('result-mail', ['data' => $data], function ($message) use ($data) {
+                $message->to($data['email'])->subject($data['exam_name'] . $data['title']);
+            });
+
+
+            return response()->json(['success' => true, 'msg' => 'Approved Successfully!', 'data' => $attemptId]);
+        } catch (\Throwable $e) {
+            return response()->json(['success' => false, 'msg' => $e->getMessage()]);
+        }
+    }
 }
