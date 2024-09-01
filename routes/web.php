@@ -11,7 +11,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ExamController;
 
 Route::get('/', function () {
-    return redirect('/Login');
+    return redirect('/login');
     //Mail::to('example@email.com')->send(new TestMail());
 });
 
