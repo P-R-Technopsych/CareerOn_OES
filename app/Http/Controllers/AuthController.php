@@ -7,9 +7,8 @@ use App\Models\User;
 use App\Models\Subject;
 use App\Models\Exam;
 
-use Illuminate\support\Facades\Hash;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Session;
 
 use App\Models\PasswordReset;
 use Illuminate\Support\Facades\Mail;
